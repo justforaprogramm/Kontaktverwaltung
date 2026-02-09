@@ -53,3 +53,9 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# database files
+*.db
+
+# executable files
+Kontaktverwaltung
