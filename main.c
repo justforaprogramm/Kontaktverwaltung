@@ -9,7 +9,7 @@
  */
 int main(int argc, char *argv[])
 {
-    // Initialisiert die Tabellen beim Start
+    //if not in path make a database
     mySqlite(1); 
 
     if(argc > 1)
@@ -95,11 +95,11 @@ int help(void)
 }
 
 /**
- * adds a kontakt with info
+ * adds a kontakt with info about kontakt
  */
 int addContact(void)
 {
-    return mySqlite(2); // Case 2 in sqlite.c übernimmt das interaktive Hinzufügen
+    return mySqlite(2); // Case 2
 }
 
 /**
@@ -107,7 +107,7 @@ int addContact(void)
  */
 int getContact(void)
 {
-    return mySqlite(5); // Case 5: Detailansicht
+    return mySqlite(5); // Case 5
 }
 
 /**
@@ -115,9 +115,9 @@ int getContact(void)
  */
 int getContacts(void)
 {
-    return mySqlite(6); // Case 6: Kurze Liste
+    return mySqlite(6); // Case 6
 }
 
-// Dummy Implementierungen für den Rest
+// Dummy Implementierungen
 int editContact(void) { (void)printf("Feature noch nicht implementiert.\n"); return 0; }
 int removeContact(void) { (void)printf("Feature noch nicht implementiert.\n"); return 0; }

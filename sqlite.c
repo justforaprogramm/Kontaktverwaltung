@@ -4,10 +4,13 @@
 #include "sqlite.h"
 #include <string.h>
 
+/**
+ * as in name, executes the sql code if avaible
+ */
 int execute_internal_sql(const char *sql) {
     sqlite3 *db;
     char *err_msg = 0;
-    int rc = sqlite3_open("Contacts.db", &db);
+    int rc = sqlite3_open(DATABASE, &db);
     if (rc != SQLITE_OK) return 1;
     rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {
@@ -19,6 +22,9 @@ int execute_internal_sql(const char *sql) {
     return 0;
 }
 
+/**
+ * prints sql return
+ */
 static int print_callback(void *data, int argc, char **argv, char **azColName) {
     (void)data;
     for (int i = 0; i < argc; i++) {
@@ -28,6 +34,9 @@ static int print_callback(void *data, int argc, char **argv, char **azColName) {
     return 0;
 }
 
+/**
+ * choose action and excecute
+ */
 int mySqlite(int exec) {
     sqlite3 *db;
     char sql[1024];
