@@ -137,6 +137,22 @@ int mySqlite(int exec)
                             data.firstname, data.middlename, data.lastname, data.birthday, id);
                     execute_internal_sql(sql);
                     break;
+                case 2: {
+                    char typ[20], val[100];
+                    (void)printf("Type: "); if(scanf("%19s", typ)) {} clear_buffer();
+                    (void)printf("Number: "); if(scanf("%99s", val)) {} clear_buffer();
+                    (void)sprintf(sql, "INSERT INTO phones (contact_id, typ, phone_number) VALUES (%d, '%s', '%s');", id, typ, val);
+                    (void)execute_internal_sql(sql);
+                    break;
+                }
+                case 3: {
+                    char typ[20], val[100];
+                    (void)printf("Type: "); if(scanf("%19s", typ)) {} clear_buffer();
+                    (void)printf("Address: "); if(scanf("%99s", val)) {} clear_buffer();
+                    (void)sprintf(sql, "INSERT INTO emails (contact_id, typ, email_address) VALUES (%d, '%s', '%s');", id, typ, val);
+                    (void)execute_internal_sql(sql);
+                    break;
+                }
                 case 4: // Delete Phone
                     (void)printf("Phone ID to delete: "); if (scanf("%d", &sub_choice) == 1) {
                         sprintf(sql, "DELETE FROM phones WHERE id = %d AND contact_id = %d;", sub_choice, id);
