@@ -39,22 +39,34 @@ int mySqlite(int exec)
 
         case 2:
         { // add Contact
-            char v[50], m[50], n[50], g[50], typ[20], val[100], choice[5];
+            typedef struct {
+                char v[50];      // First Name
+                char m[50];      // Middle Name
+                char n[50];      // Last Name
+                char g[50];      // Birthday
+                char typ[20];    // Type (Mobile/Work)
+                char val[100];   // Value (Number/Email)
+                char choice[5];  // Loop choice
+            } DataPayload;
+
+            DataPayload data; // Instantiate the struct
             int random_id; 
             sqlite3 *db;
+            char sql[512]; // Ensure sql buffer is defined
 
             clear_buffer(); 
-            (void)printf("First Name: "); if(scanf("%49s", v)) {}
+            (void)printf("First Name: "); 
+            if(scanf("%49s", data.v)) {} // Access via data.v
             
             clear_buffer();
             (void)printf("Middle Name (Press ENTER to skip): ");
-            if (fgets(m, sizeof(m), stdin))
+            if (fgets(data.m, sizeof(data.m), stdin))
             {
-                m[strcspn(m, "\n")] = 0;
+                data.m[strcspn(data.m, "\n")] = 0;
             }
 
-            (void)printf("Last Name: "); if(scanf("%49s", n)) {}
-            (void)printf("Birthday: "); if(scanf("%49s", g)) {}
+            (void)printf("Last Name: "); if(scanf("%49s", data.n)) {}
+            (void)printf("Birthday: "); if(scanf("%49s", data.g)) {}
 
             random_id = 100000000 + rand() % 900000000;
 
@@ -66,8 +78,9 @@ int mySqlite(int exec)
             
             sqlite3_exec(db, "PRAGMA foreign_keys = ON;", 0, 0, 0);
 
+            // Using struct members in sprintf
             sprintf(sql, "INSERT INTO kontakte (id, vorname, mittelname, nachname, geburtstag) VALUES (%d, '%s','%s','%s','%s');", 
-                    random_id, v, m, n, g);
+                    random_id, data.v, data.m, data.n, data.g);
 
             if (sqlite3_exec(db, sql, 0, 0, 0) != SQLITE_OK)
             {
@@ -76,17 +89,16 @@ int mySqlite(int exec)
                 break;
             }
 
-            int last_id = random_id;
-
+            // Phone Numbers Loop
             do
             {
-                (void)printf("Add phone number? (y/n): "); if(scanf("%4s", choice)) {}
-                if (strcmp(choice, "y") == 0)
+                (void)printf("Add phone number? (y/n): "); if(scanf("%4s", data.choice)) {}
+                if (strcmp(data.choice, "y") == 0)
                 {
-                    (void)printf("Type (e.g. Mobile): "); if(scanf("%19s", typ)) {}
-                    (void)printf("Number: "); if(scanf("%99s", val)) {}
+                    (void)printf("Type (e.g. Mobile): "); if(scanf("%19s", data.typ)) {}
+                    (void)printf("Number: "); if(scanf("%99s", data.val)) {}
                     
-                    sprintf(sql, "INSERT INTO telefone (kontakt_id, typ, nummer) VALUES (%d, '%s', '%s');", last_id, typ, val);
+                    sprintf(sql, "INSERT INTO telefone (kontakt_id, typ, nummer) VALUES (%d, '%s', '%s');", random_id, data.typ, data.val);
                     char *err_msg = 0;
                     if (sqlite3_exec(db, sql, 0, 0, &err_msg) != SQLITE_OK)
                     {
@@ -94,18 +106,18 @@ int mySqlite(int exec)
                         sqlite3_free(err_msg);
                     }
                 }
-            }
-            while (strcmp(choice, "y") == 0);
+            } while (strcmp(data.choice, "y") == 0);
 
+            // E-Mail Loop
             do
             {
-                (void)printf("Add E-Mail? (y/n): "); if(scanf("%4s", choice)) {}
-                if (strcmp(choice, "y") == 0)
+                (void)printf("Add E-Mail? (y/n): "); if(scanf("%4s", data.choice)) {}
+                if (strcmp(data.choice, "y") == 0)
                 {
-                    (void)printf("Type (e.g. Work): "); if(scanf("%19s", typ)) {}
-                    (void)printf("Address: "); if(scanf("%99s", val)) {}
+                    (void)printf("Type (e.g. Work): "); if(scanf("%19s", data.typ)) {}
+                    (void)printf("Address: "); if(scanf("%99s", data.val)) {}
                     
-                    sprintf(sql, "INSERT INTO mails (kontakt_id, typ, adresse) VALUES (%d, '%s', '%s');", last_id, typ, val);
+                    sprintf(sql, "INSERT INTO mails (kontakt_id, typ, adresse) VALUES (%d, '%s', '%s');", random_id, data.typ, data.val);
                     char *err_msg = 0;
                     if (sqlite3_exec(db, sql, 0, 0, &err_msg) != SQLITE_OK)
                     {
@@ -113,10 +125,10 @@ int mySqlite(int exec)
                         sqlite3_free(err_msg);
                     }
                 }
-            } while (strcmp(choice, "y") == 0);
+            } while (strcmp(data.choice, "y") == 0);
 
             sqlite3_close(db);
-            (void)printf("Contact added successfully (ID: %d)\n", last_id);
+            (void)printf("Contact added successfully (ID: %d)\n", random_id);
             break;
         }
 
