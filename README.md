@@ -43,4 +43,6 @@ getContact:     show all details for one index
 
 - security like encryption has to be added
 
+- only in alpha, has some minor bugs
+
 - only uses std libs (besides sqlite3.h)
