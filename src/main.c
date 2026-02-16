@@ -9,7 +9,7 @@
  */
 int main(int argc, char *argv[])
 {
-    // Initializes db-file and creates tables if they don't exist
+    // Initializes db-file and creates tables if don't exist
     mySqlite(1); 
 
     if(argc > 1)
