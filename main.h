@@ -30,5 +30,6 @@
  */
 int help(void);
 int giveAnswer(char in[INPUT_BUFFER]);
+int clear();
 
 #endif // MAIN_H

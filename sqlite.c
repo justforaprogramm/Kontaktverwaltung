@@ -5,22 +5,26 @@
 #include <time.h>
 #include <stdlib.h>
 
-static void clear_buffer() {
+static void clear_buffer()
+{
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 }
 
-int mySqlite(int exec) {
+int mySqlite(int exec)
+{
     sqlite3 *db;
     char sql[1024];
 
     static int seeded = 0;
-    if (!seeded) {
+    if (!seeded)
+    {
         srand(time(NULL));
         seeded = 1;
     }
 
-    switch(exec) {
+    switch(exec)
+    {
         case 1: //make table if file is empty
             execute_internal_sql(
                 "CREATE TABLE IF NOT EXISTS kontakte ("
@@ -35,7 +39,8 @@ int mySqlite(int exec) {
             );
             break;
 
-        case 2: { // add Contact
+        case 2:
+        { // add Contact
             char v[50], m[50], n[50], g[50], typ[20], val[100], choice[5];
             int random_id; 
             sqlite3 *db;
@@ -45,7 +50,8 @@ int mySqlite(int exec) {
             
             clear_buffer();
             (void)printf("Middle Name (Press ENTER to skip): ");
-            if (fgets(m, sizeof(m), stdin)) {
+            if (fgets(m, sizeof(m), stdin))
+            {
                 m[strcspn(m, "\n")] = 0;
             }
 
@@ -54,7 +60,8 @@ int mySqlite(int exec) {
 
             random_id = 100000000 + rand() % 900000000;
 
-            if (sqlite3_open("Contacts.db", &db) != SQLITE_OK) {
+            if (sqlite3_open("Contacts.db", &db) != SQLITE_OK)
+            {
                 fprintf(stderr, "Could not open database\n");
                 break;
             }
@@ -64,7 +71,8 @@ int mySqlite(int exec) {
             sprintf(sql, "INSERT INTO kontakte (id, vorname, mittelname, nachname, geburtstag) VALUES (%d, '%s','%s','%s','%s');", 
                     random_id, v, m, n, g);
 
-            if (sqlite3_exec(db, sql, 0, 0, 0) != SQLITE_OK) {
+            if (sqlite3_exec(db, sql, 0, 0, 0) != SQLITE_OK)
+            {
                 fprintf(stderr, "Failed to insert contact: %s\n", sqlite3_errmsg(db));
                 sqlite3_close(db);
                 break;
@@ -72,30 +80,37 @@ int mySqlite(int exec) {
 
             int last_id = random_id;
 
-            do {
+            do
+            {
                 (void)printf("Add phone number? (y/n): "); if(scanf("%4s", choice)) {}
-                if (strcmp(choice, "y") == 0) {
+                if (strcmp(choice, "y") == 0)
+                {
                     (void)printf("Type (e.g. Mobile): "); if(scanf("%19s", typ)) {}
                     (void)printf("Number: "); if(scanf("%99s", val)) {}
                     
                     sprintf(sql, "INSERT INTO telefone (kontakt_id, typ, nummer) VALUES (%d, '%s', '%s');", last_id, typ, val);
                     char *err_msg = 0;
-                    if (sqlite3_exec(db, sql, 0, 0, &err_msg) != SQLITE_OK) {
+                    if (sqlite3_exec(db, sql, 0, 0, &err_msg) != SQLITE_OK)
+                    {
                         fprintf(stderr, "SQL Error: %s\n", err_msg);
                         sqlite3_free(err_msg);
                     }
                 }
-            } while (strcmp(choice, "y") == 0);
+            }
+            while (strcmp(choice, "y") == 0);
 
-            do {
+            do
+            {
                 (void)printf("Add E-Mail? (y/n): "); if(scanf("%4s", choice)) {}
-                if (strcmp(choice, "y") == 0) {
+                if (strcmp(choice, "y") == 0)
+                {
                     (void)printf("Type (e.g. Work): "); if(scanf("%19s", typ)) {}
                     (void)printf("Address: "); if(scanf("%99s", val)) {}
                     
                     sprintf(sql, "INSERT INTO mails (kontakt_id, typ, adresse) VALUES (%d, '%s', '%s');", last_id, typ, val);
                     char *err_msg = 0;
-                    if (sqlite3_exec(db, sql, 0, 0, &err_msg) != SQLITE_OK) {
+                    if (sqlite3_exec(db, sql, 0, 0, &err_msg) != SQLITE_OK)
+                    {
                         fprintf(stderr, "SQL Error: %s\n", err_msg);
                         sqlite3_free(err_msg);
                     }
@@ -107,7 +122,8 @@ int mySqlite(int exec) {
             break;
         }
 
-        case 3: { // editContact
+        case 3:
+        { // editContact
             int id;
             char v[50], m[50], n[50], g[50];
             int sub_choice;
@@ -122,7 +138,8 @@ int mySqlite(int exec) {
                 "Choice: ";
 
             (void)printf("Enter the ID of the contact you want to edit: ");
-            if (scanf("%d", &id) != 1) {
+            if (scanf("%d", &id) != 1)
+            {
                 clear_buffer();
                 (void)printf("Invalid ID format.\n");
                 break;
@@ -131,7 +148,8 @@ int mySqlite(int exec) {
 
             // State the ID and list all associated sub-data with their IDs
             (void)printf("\n--- EDITING CONTACT ID: %d ---\n", id);
-            if (sqlite3_open("Contacts.db", &db) == SQLITE_OK) {
+            if (sqlite3_open("Contacts.db", &db) == SQLITE_OK)
+            {
                 (void)printf("--- ASSOCIATED PHONES (ID for deletion) ---\n");
                 sprintf(sql, "SELECT id, typ, nummer FROM telefone WHERE kontakt_id = %d;", id);
                 sqlite3_exec(db, sql, print_callback, 0, 0);
@@ -144,13 +162,15 @@ int mySqlite(int exec) {
 
             (void)printf("%s", menu);
             
-            if (scanf("%d", &sub_choice) != 1) {
+            if (scanf("%d", &sub_choice) != 1)
+            {
                 clear_buffer();
                 break;
             }
             clear_buffer();
 
-            switch(sub_choice) {
+            switch(sub_choice)
+            {
                 case 1: // Update Basic Info
                     (void)printf("New First Name: "); if (scanf("%49s", v)) {} clear_buffer();
                     (void)printf("New Middle Name (ENTER to skip): ");
@@ -164,7 +184,8 @@ int mySqlite(int exec) {
                     (void)printf("Contact name/birthday updated.\n");
                     break;
 
-                case 2: { // Add phone
+                case 2:
+                { // Add phone
                     char typ[20], num[100];
                     (void)printf("Type: "); if (scanf("%19s", typ)) {} clear_buffer();
                     (void)printf("Number: "); if (scanf("%99s", num)) {} clear_buffer();
@@ -174,7 +195,8 @@ int mySqlite(int exec) {
                     break;
                 }
 
-                case 3: { // Add email
+                case 3:
+                { // Add email
                     char typ[20], adr[100];
                     (void)printf("Type: "); if (scanf("%19s", typ)) {} clear_buffer();
                     (void)printf("Address: "); if (scanf("%99s", adr)) {} clear_buffer();
@@ -184,7 +206,8 @@ int mySqlite(int exec) {
                     break;
                 }
 
-                case 4: { // DELETE Phone
+                case 4:
+                { // DELETE Phone
                     int item_id;
                     (void)printf("Enter the Phone ID to delete: ");
                     if (scanf("%d", &item_id) == 1) {
@@ -196,7 +219,8 @@ int mySqlite(int exec) {
                     break;
                 }
 
-                case 5: { // DELETE Email
+                case 5:
+                { // DELETE Email
                     int item_id;
                     (void)printf("Enter the E-Mail ID to delete: ");
                     if (scanf("%d", &item_id) == 1) {
@@ -215,13 +239,15 @@ int mySqlite(int exec) {
             break;
         }
 
-        case 4: { // Remove (Pop) Contact
+        case 4:
+        { // Remove (Pop) Contact
             int id;
             (void)printf("Enter ID to delete: ");
             if (scanf("%d", &id) != 1) break;
 
             (void)printf("\n--- PREVIEW BEFORE DELETION ---\n");
-            if (sqlite3_open("Contacts.db", &db) == SQLITE_OK) {
+            if (sqlite3_open("Contacts.db", &db) == SQLITE_OK)
+            {
                 sprintf(sql, "SELECT * FROM kontakte WHERE id = %d;", id);
                 sqlite3_exec(db, sql, print_callback, 0, 0);
                 sqlite3_close(db);
@@ -231,21 +257,26 @@ int mySqlite(int exec) {
             char confirm;
             if (scanf(" %c", &confirm)) {} 
 
-            if (confirm == 'y' || confirm == 'Y') {
+            if (confirm == 'y' || confirm == 'Y')
+            {
                 sprintf(sql, "DELETE FROM kontakte WHERE id = %d;", id);
                 execute_internal_sql(sql);
                 (void)printf("Contact deleted successfully.\n");
-            } else {
+            }
+            else
+            {
                 (void)printf("Deletion cancelled.\n");
             }
             break;
         }
 
-        case 5: { // getContact details
+        case 5:
+        { // getContact details
             int id;
             (void)printf("Contact ID: ");
             if (scanf("%d", &id) != 1) break;
-            if (sqlite3_open("Contacts.db", &db) == SQLITE_OK) {
+            if (sqlite3_open("Contacts.db", &db) == SQLITE_OK)
+            {
                 (void)printf("\n--- BASIC DATA ---\n");
                 sprintf(sql, "SELECT * FROM kontakte WHERE id = %d;", id);
                 sqlite3_exec(db, sql, print_callback, 0, 0);
@@ -261,7 +292,8 @@ int mySqlite(int exec) {
         }
 
         case 6: // getContacts (without details)
-            if (sqlite3_open("Contacts.db", &db) == SQLITE_OK) {
+            if (sqlite3_open("Contacts.db", &db) == SQLITE_OK)
+            {
                 (void)printf("\n--- ALLE KONTAKTE (ID & NAME) ---\n");
                 sqlite3_exec(db, "SELECT id, vorname, nachname FROM kontakte;", print_callback, 0, 0);
                 sqlite3_close(db);
@@ -271,13 +303,15 @@ int mySqlite(int exec) {
     return 0;
 }
 
-int execute_internal_sql(const char *sql) {
+int execute_internal_sql(const char *sql)
+{
     sqlite3 *db;
     char *err_msg = 0;
     if (sqlite3_open("Contacts.db", &db) != SQLITE_OK) return 1;
     sqlite3_exec(db, "PRAGMA foreign_keys = ON;", 0, 0, 0);
     int rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
-    if (rc != SQLITE_OK) {
+    if (rc != SQLITE_OK)
+    {
         fprintf(stderr, "SQL Error: %s\n", err_msg);
         sqlite3_free(err_msg);
     }
@@ -285,27 +319,32 @@ int execute_internal_sql(const char *sql) {
     return rc;
 }
 
-int print_callback(void *data, int argc, char **argv, char **azColName) {
+int print_callback(void *data, int argc, char **argv, char **azColName)
+{
     (void)data; 
-    for (int i = 0; i < argc; i++) {
+    for (int i = 0; i < argc; i++)
+    {
         (void)printf("%s: %s  ", azColName[i], argv[i] ? argv[i] : "NULL");
     }
     (void)printf("\n");
     return 0;
 }
 
-void removeContact(int id) {
+void removeContact(int id)
+{
     (void)printf("\n--- Previewing Contact ID: %d ---\n", id);
     mySqlite(5);
 
     (void)printf("\nAre you sure you want to delete this contact? (y/n): ");
     char confirm;
-    if (scanf(" %c", &confirm) != 1) {
+    if (scanf(" %c", &confirm) != 1)
+    {
         (void)printf("Error reading input.\n");
         return;
     }
 
-    if (confirm == 'y' || confirm == 'Y') {
+    if (confirm == 'y' || confirm == 'Y')
+    {
         execute_internal_sql(
             "BEGIN TRANSACTION;"
             "DELETE FROM telefone WHERE kontakt_id = ?;"
@@ -314,7 +353,9 @@ void removeContact(int id) {
             "COMMIT;"
         );
         (void)printf("Contact and associated data deleted successfully.\n");
-    } else {
+    }
+    else
+    {
         (void)printf("Deletion cancelled.\n");
     }
 }

@@ -71,15 +71,7 @@ int giveAnswer(char in[INPUT_BUFFER])
     else if(!strcmp("add", in)) (void)mySqlite(2);
     else if(!strcmp("edit", in)) (void)mySqlite(3);
     else if(!strcmp("remove", in)) (void)mySqlite(4);
-    else if (!strcmp("clear", in)) {
-        int unused; 
-        #ifdef _WIN32
-            unused = system("cls");
-        #else
-            unused = system("clear");
-        #endif
-        (void)unused;
-}
+    else if (!strcmp("clear", in)) (void)clear();
     else (void)printf("type help for help!\n");
     return exit ? 1 : 0;
 }
@@ -109,4 +101,15 @@ int help(void)
     for(int i=0;i<HELP_LINE;i++) (void)printf("-");
     (void)printf("\n");
     return 0;
+}
+
+int clear()
+{
+    int unused; 
+    #ifdef _WIN32
+        unused = system("cls");
+    #else
+        unused = system("clear");
+    #endif
+    return unused;
 }
