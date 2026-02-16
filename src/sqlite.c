@@ -1,7 +1,7 @@
 /**
  * COPYRIGHT Benjamin Schmid <inf25189@lehre.dhbw-stuttgart.de>
  */
-#include "sqlite.h"
+#include "../header/sqlite.h"
 
 static void clear_buffer()
 {

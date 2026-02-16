@@ -17,7 +17,7 @@ TARGET = Kontaktverwaltung
 DEBUG_TARGET = Kontaktverwaltung_debug
 
 # Source files
-SRC = main.c sqlite.c
+SRC = src/main.c src/sqlite.c
 
 # Libraries
 LIBS = -lsqlite3

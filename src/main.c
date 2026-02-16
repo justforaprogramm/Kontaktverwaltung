@@ -2,7 +2,7 @@
  * COPYRIGHT Benjamin Schmid <inf25189@lehre.dhbw-stuttgart.de>
  */
 
-#include "main.h"
+#include "../header/main.h"
 
 /**
  * manages input
