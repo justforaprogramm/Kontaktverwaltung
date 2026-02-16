@@ -34,11 +34,6 @@ remove:         removes a contact
 getContacts:    list all (index & name)
 getContact:     show all details for one index
 ```
-## if wanted, embed into linux
-
-```bash
-
-```
 
 
 ## Notes

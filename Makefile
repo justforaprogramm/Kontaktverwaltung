@@ -1,7 +1,7 @@
 # COPYRIGHT Benjamin Schmid <inf25189@lehre.dhbw-stuttgart.de>
 
 # Compiler
-CC = gcc
+CC = x86_64-w64-mingw32-gcc
 
 # Base compiler flags
 CFLAGS = -Wall -Wextra
