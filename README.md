@@ -3,7 +3,7 @@ A C-based contact management system using SQLite3
 
 ## Quickstart
 
-[![downloads](https://img.shields.io/github/downloads/justforaprogramm/Kontaktverwaltung/total.svg)](https://github.com/justforaprogramm/Kontaktverwaltung/releases)
+[![downloads](https://img.shields.io/github/downloads/justforaprogramm/Kontaktverwaltung/total.svg?cacheSeconds=3600)](https://github.com/justforaprogramm/Kontaktverwaltung/releases)
 
 ### Compile EZ
 To compile the project, Run:
