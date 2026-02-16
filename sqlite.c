@@ -2,8 +2,6 @@
  * COPYRIGHT Benjamin Schmid <inf25189@lehre.dhbw-stuttgart.de>
  */
 #include "sqlite.h"
-#include <time.h>
-#include <stdlib.h>
 
 static void clear_buffer()
 {
