@@ -20,6 +20,9 @@ make debug
 make clean
 
 sudo rm -rf ../Kontaktverwaltung/
+
+# if wanted for windows, install mingw and sqlite3 for mingw (to test in linux, use sudo apt install wine) 
+x86_64-w64-mingw32-gcc -Wall -Wextra -O2 -Iheader -o Kontaktverwaltung.exe src/main.c src/sqlite.c src/sqlite3.c
 ```
 
 ### helptext
