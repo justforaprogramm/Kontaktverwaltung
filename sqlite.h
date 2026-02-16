@@ -12,6 +12,18 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+/**
+ * struct
+ */
+typedef struct {
+    char firstname[50];
+    char middlename[50];
+    char lastname[50];
+    char birthday[50];
+    char typ[20];    
+    char val[100];   
+    char choice[5];  
+} DataPayload;
 
 /**
  * private functions in "main.c"
