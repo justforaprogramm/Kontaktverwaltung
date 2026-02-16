@@ -29,11 +29,6 @@
  * private functions in "main.c"
  */
 int help(void);
-int addContact(void);
-int editContact(void);
-int removeContact(void);
-int getContacts(void);
-int getContact(void);
 int giveAnswer(char in[INPUT_BUFFER]);
 
 #endif // MAIN_H

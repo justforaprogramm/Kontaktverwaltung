@@ -9,7 +9,7 @@
  */
 int main(int argc, char *argv[])
 {
-    // Initialisiert die Tabellen beim Start
+    // Initializes db-file and creates tables if they don't exist
     mySqlite(1); 
 
     if(argc > 1)
@@ -66,11 +66,20 @@ int giveAnswer(char in[INPUT_BUFFER])
     bool exit = false;
     if(!strcmp("exit", in)) exit = true;
     else if(!strcmp("help", in)) (void)help();
-    else if(!strcmp("getContacts", in)) (void)getContacts();
-    else if(!strcmp("getContact", in)) (void)getContact();
-    else if(!strcmp("add", in)) (void)addContact();
-    else if(!strcmp("edit", in)) (void)editContact();
-    else if(!strcmp("remove", in)) (void)removeContact();
+    else if(!strcmp("getContacts", in)) (void)mySqlite(6);
+    else if(!strcmp("getContact", in)) (void)mySqlite(5);
+    else if(!strcmp("add", in)) (void)mySqlite(2);
+    else if(!strcmp("edit", in)) (void)mySqlite(3);
+    else if(!strcmp("remove", in)) (void)mySqlite(4);
+    else if (!strcmp("clear", in)) {
+        int unused; 
+        #ifdef _WIN32
+            unused = system("cls");
+        #else
+            unused = system("clear");
+        #endif
+        (void)unused;
+}
     else (void)printf("type help for help!\n");
     return exit ? 1 : 0;
 }
@@ -82,9 +91,17 @@ int help(void)
 {
     (void)printf("help text:\n");
     for(int i=0;i<HELP_LINE;i++) (void)printf("-"); 
-    (void)printf("\nexit:\texits the programm\nhelp:\tshows this help text\n"
-                 "add:\tadds a new contact\ngetContacts:\tlist all (index & name)\n"
-                 "getContact:\tshow all details for one index\n");
+    const char functionText[] = 
+    "\nexit:\t\texits the program"
+    "\nhelp:\t\tshows this help text"
+    "\nclear:\t\tclears the console screen"
+    "\nadd:\t\tadds a new contact"
+    "\nedit:\t\tedits an existing contact"
+    "\nremove:\t\tremoves a contact"
+    "\ngetContacts:\tlist all (index & name)"
+    "\ngetContact:\tshow all details for one index\n";
+    
+    (void)printf("%s", functionText);
 
     #ifdef DEBUG
         (void)printf("DEBUG: added help\n");
@@ -93,31 +110,3 @@ int help(void)
     (void)printf("\n");
     return 0;
 }
-
-/**
- * adds a kontakt with info
- */
-int addContact(void)
-{
-    return mySqlite(2); // Case 2 in sqlite.c übernimmt das interaktive Hinzufügen
-}
-
-/**
- * gets all infos about a contact
- */
-int getContact(void)
-{
-    return mySqlite(5); // Case 5: Detailansicht
-}
-
-/**
- * gets name and index of all contacts
- */
-int getContacts(void)
-{
-    return mySqlite(6); // Case 6: Kurze Liste
-}
-
-// Dummy Implementierungen für den Rest
-int editContact(void) { (void)printf("Feature noch nicht implementiert.\n"); return 0; }
-int removeContact(void) { (void)printf("Feature noch nicht implementiert.\n"); return 0; }
