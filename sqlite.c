@@ -40,10 +40,10 @@ int mySqlite(int exec)
         case 2:
         { // add Contact
             typedef struct {
-                char v[50];      // First Name
-                char m[50];      // Middle Name
-                char n[50];      // Last Name
-                char g[50];      // Birthday
+                char firstname[50];
+                char middlename[50];
+                char name[50];
+                char birthday[50];      // Birthday
                 char typ[20];    // Type (Mobile/Work)
                 char val[100];   // Value (Number/Email)
                 char choice[5];  // Loop choice
@@ -56,17 +56,17 @@ int mySqlite(int exec)
 
             clear_buffer(); 
             (void)printf("First Name: "); 
-            if(scanf("%49s", data.v)) {} // Access via data.v
+            if(scanf("%49s", data.firstname)) {} // Access via data.v
             
             clear_buffer();
             (void)printf("Middle Name (Press ENTER to skip): ");
-            if (fgets(data.m, sizeof(data.m), stdin))
+            if (fgets(data.middlename, sizeof(data.middlename), stdin))
             {
-                data.m[strcspn(data.m, "\n")] = 0;
+                data.middlename[strcspn(data.middlename, "\n")] = 0;
             }
 
-            (void)printf("Last Name: "); if(scanf("%49s", data.n)) {}
-            (void)printf("Birthday: "); if(scanf("%49s", data.g)) {}
+            (void)printf("Last Name: "); if(scanf("%49s", data.name)) {}
+            (void)printf("Birthday: "); if(scanf("%49s", data.birthday)) {}
 
             random_id = 100000000 + rand() % 900000000;
 
@@ -80,7 +80,7 @@ int mySqlite(int exec)
 
             // Using struct members in sprintf
             sprintf(sql, "INSERT INTO kontakte (id, vorname, mittelname, nachname, geburtstag) VALUES (%d, '%s','%s','%s','%s');", 
-                    random_id, data.v, data.m, data.n, data.g);
+                    random_id, data.firstname, data.middlename, data.name, data.birthday);
 
             if (sqlite3_exec(db, sql, 0, 0, 0) != SQLITE_OK)
             {
