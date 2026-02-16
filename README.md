@@ -3,6 +3,8 @@ A C-based contact management system using SQLite3
 
 ## Quickstart
 
+[![downloads](https://img.shields.io/github/downloads/lencx/ChatGPT/total.svg?style=flat-square)](https://github.com/justforaprogramm/Kontaktverwaltung/releases)
+
 ### Compile EZ
 To compile the project, Run:
 
