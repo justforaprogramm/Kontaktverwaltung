@@ -21,7 +21,7 @@ int mySqlite(int exec) {
     }
 
     switch(exec) {
-        case 1:
+        case 1: //make table if file is empty
             execute_internal_sql(
                 "CREATE TABLE IF NOT EXISTS kontakte ("
                 "id INTEGER PRIMARY KEY, " 
@@ -35,7 +35,7 @@ int mySqlite(int exec) {
             );
             break;
 
-        case 2: {
+        case 2: { // add Contact
             char v[50], m[50], n[50], g[50], typ[20], val[100], choice[5];
             int random_id; 
             sqlite3 *db;
